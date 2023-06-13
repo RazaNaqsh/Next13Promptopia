@@ -12,10 +12,11 @@ const Nav = () => {
 	const [toggleDropdown, setToggleDropdown] = useState(false);
 
 	useEffect(() => {
-		(async () => {
+		const setUpProviders = async () => {
 			const res = await getProviders();
 			setProviders(res);
-		})();
+		};
+		setUpProviders();
 	}, []);
 
 	return (
@@ -33,6 +34,9 @@ const Nav = () => {
 				/>
 				<p className="logo_text">Promptopia</p>
 			</Link>
+
+			{/* {alert(session?.user)} */}
+			{/* {alert(providers)} */}
 
 			{/* Desktop navigation */}
 			<div className="sm:flex hidden">
@@ -56,7 +60,7 @@ const Nav = () => {
 
 							<Link href="/profile">
 								<Image
-									src="/assets/images/logo.svg"
+									src={session?.user?.image}
 									width={37}
 									height={37}
 									className="rounded-full"
@@ -88,7 +92,7 @@ const Nav = () => {
 				{session?.user ? (
 					<div className="flex">
 						<Image
-							src="/assets/images/logo.svg"
+							src={session?.user?.image}
 							width={37}
 							height={37}
 							className="rounded-full"
