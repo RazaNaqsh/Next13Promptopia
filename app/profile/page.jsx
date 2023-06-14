@@ -9,7 +9,7 @@ import Profile from "@components/Profile";
 
 const MyProfile = () => {
 	const { data: session } = useSession();
-	const [posts, setPosts] = useState([]);
+	const [myPosts, setMyPosts] = useState([]);
 
 	const router = useRouter();
 
@@ -18,7 +18,7 @@ const MyProfile = () => {
 			const res = await fetch(`/api/users/${session?.user.id}/posts`);
 			const data = await res.json();
 
-			setPosts(data);
+			setMyPosts(data);
 		};
 		if (session?.user.id) fetchPosts();
 	}, [session?.user.id]);
@@ -26,12 +26,26 @@ const MyProfile = () => {
 	const handleEdit = (post) => {
 		router.push(`/update-prompt?id=${post._id}`);
 	};
-	const handleDelete = async () => {};
+
+	const handleDelete = async (post) => {
+		const hasConfirmed = confirm("Are you sure you wanna delete this prompts?");
+
+		if (hasConfirmed) {
+			try {
+				await fetch(`/api/prompt/${post._id.toString()}`, { method: "DELETE" });
+
+				const filteredPosts = myPosts.filter((p) => p._id !== post._id);
+				setMyPosts(filteredPosts);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	};
 	return (
 		<Profile
 			name="My"
 			desc="Welcome to your personalized profile page.  Share your exceptional prompts and inspire others with the power of your imagination"
-			data={posts}
+			data={myPosts}
 			handleEdit={handleEdit}
 			handleDelete={handleDelete}
 		/>
