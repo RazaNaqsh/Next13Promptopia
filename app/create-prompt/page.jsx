@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const CreatePrompt = () => {
+	const router = useRouter();
+	const { data: session } = useSession();
+
 	const [submitting, setSubmitting] = useState(false);
 	const [post, setPost] = useState({
 		prompt: "",
@@ -24,7 +27,7 @@ const CreatePrompt = () => {
 				}),
 			});
 			if (res.ok) {
-				Router.push("/");
+				router.push("/");
 			}
 		} catch (err) {
 		} finally {
